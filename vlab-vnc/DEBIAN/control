@@ -5,5 +5,6 @@ Priority: optional
 Architecture: all
 Depends: vnc4server, iptables-persistent
 Conflicts: lightdm, gdm
+Suggests: xfce4
 Maintainer: USTC Vlab <vlab@ustc.edu.cn>
 Description: Enable VNC in coordination with Vlab frontend

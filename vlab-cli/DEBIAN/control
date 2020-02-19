@@ -1,0 +1,9 @@
+Package: vlab-cli
+Version: 1.0-1
+Section: base
+Priority: optional
+Architecture: all
+Depends: bash (>= 4.2)
+Recommends: vlab-vnc
+Maintainer: USTC Vlab <vlab@ustc.edu.cn>
+Description: CLI for Vlab VM settings
