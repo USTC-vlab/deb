@@ -1,0 +1,9 @@
+Package: vlab-vnc
+Version: 1.0-1
+Section: base
+Priority: optional
+Architecture: all
+Depends: vnc4server, iptables-persistent
+Conflicts: lightdm, gdm
+Maintainer: USTC Vlab <vlab@ustc.edu.cn>
+Description: Enable VNC in coordination with Vlab frontend

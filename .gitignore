@@ -1,0 +1,7 @@
+# Vim
+*~
+*.swp
+*.sw_
+
+# Debian packages
+*.deb
