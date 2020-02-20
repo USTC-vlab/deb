@@ -3,7 +3,7 @@
 test x"$SHELL" = x"" && SHELL=/bin/bash
 test x"$1"     = x"" && set -- default
 
-(sleep 5; vncconfig -nowin) &
+(sleep 3; vncconfig -nowin) &
 "$SHELL" -l <<EOF
 exec /etc/X11/Xsession "$@"
 EOF

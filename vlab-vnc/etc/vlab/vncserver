@@ -42,7 +42,7 @@ mkdir -p .vnc
 LANG=C.UTF-8
 LC_ALL=C.UTF-8
 . /etc/default/locale
-export LANG LC_ALL
+export LANG LANGUAGE LC_ALL
 
 "$XSTARTUP" > ".vnc/$VNCIDENT.log" 2>&1 &
 exec Xvnc "$DISPLAY" -desktop "$VNCIDENT ($USERNAME)" \

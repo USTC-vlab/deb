@@ -30,7 +30,7 @@ vnc-set-res() {
     5|1920*) RES="1920x1080";;
     *) echo "Unknown resolution '$1'" >&2; exit 1;;
   esac
-  if [ -n "$RES" ]; then
+  if [ -z "$RES" ]; then
     echo "What resolution?" >&2
     exit 1
   fi
@@ -50,7 +50,7 @@ fi
 
 case "$1" in
   -h|--help) show_help; exit 0;;
-  restart|set-res) CMD="vlab-$1"; shift; "$CMD" "$@";;
+  restart|set-res) CMD="vnc-$1"; shift; "$CMD" "$@";;
   *) echo "Unknown command '$1'" >&2; exit 1;;
 esac
 
