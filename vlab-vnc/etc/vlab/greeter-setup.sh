@@ -1,0 +1,2 @@
+#!/bin/sh
+vncconfig -nowin &

@@ -1,0 +1,24 @@
+#!/bin/bash
+# Need Bash for $PPID
+
+DISPLAY=":0"
+LIGHTDM_PID=$PPID
+XVNC_PID=0
+
+kill_vnc() {
+  kill -s SIGTERM $XVNC_PID
+  wait
+}
+
+if [ $# -gt 0 ]; then
+  DISPLAY="$1"
+fi
+
+AUTHORITY="/var/run/lightdm/root/$DISPLAY"
+
+Xvnc "$DISPLAY" -rfbport 5900 -seat seat0 -SecurityTypes None -auth "$AUTHORITY" &
+XVNC_PID=$!
+trap kill_vnc SIGTERM
+
+wait
+exit 0
