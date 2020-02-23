@@ -20,5 +20,8 @@ Xvnc "$DISPLAY" -rfbport 5900 -seat seat0 -SecurityTypes None -auth "$AUTHORITY"
 XVNC_PID=$!
 trap kill_vnc SIGTERM
 
+sleep 2
+kill -s SIGUSR1 $LIGHTDM_PID
+
 wait
 exit 0

@@ -3,7 +3,8 @@ Version: 1.0-2
 Section: base
 Priority: optional
 Architecture: all
-Depends: lightdm, lightdm-gtk-greeter-settings, tigervnc-standalone-server, iptables-persistent
+Pre-Depends: dbus-x11
+Depends: lightdm, lightdm-greeter, lightdm-gtk-greeter-settings, tigervnc-standalone-server, iptables-persistent
 Suggests: xfce4 | xubuntu-desktop
 Maintainer: USTC Vlab <vlab@ustc.edu.cn>
 Description: Enable VNC in coordination with Vlab frontend
