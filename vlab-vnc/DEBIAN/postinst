@@ -6,11 +6,11 @@ if [ -r /tmp/vlab-vnc ]; then
 fi
 rm -f /tmp/vlab-vnc
 
-systemctl daemon-reload
-
 if [ "$INSTALL_MODE" = "1" ]; then
-  systemctl enable vlab-vnc.service
   iptables -D INPUT ! -i lo ! -s 172.31.0.2 -p tcp --dport 5900 -j DROP >/dev/null 2>&1
   iptables -I INPUT ! -i lo ! -s 172.31.0.2 -p tcp --dport 5900 -j DROP
+  ip6tables -D INPUT ! -i lo -p tcp --dport 5900 -j DROP >/dev/null 2>&1
+  ip6tables -I INPUT ! -i lo -p tcp --dport 5900 -j DROP
   iptables-save > /etc/iptables/rules.v4
+  ip6tables-save > /etc/iptables/rules.v6
 fi
