@@ -16,7 +16,7 @@ fi
 
 AUTHORITY="/var/run/lightdm/root/$DISPLAY"
 
-Xvnc "$DISPLAY" -rfbport 5900 -seat seat0 -SecurityTypes None -auth "$AUTHORITY" &
+Xvnc "$DISPLAY" -rfbport 5900 -seat seat0 -SecurityTypes None -auth "$AUTHORITY" -SendPrimary=0 &
 XVNC_PID=$!
 trap kill_vnc SIGTERM
 
