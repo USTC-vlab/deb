@@ -13,4 +13,5 @@ for d in */; do
   fi
 done
 
-dpkg-scanpackages "$DIR" > "$DIR"/Packages
+cd "$DIR"
+dpkg-scanpackages . > Packages
