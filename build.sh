@@ -1,18 +1,16 @@
 #!/bin/bash
 
-set -e
-set -o pipefail
+set -eo pipefail
 
-mkdir -p build/
-rm -f build/*
+DIR=build
+rm -f "$DIR"/*
+mkdir -p "$DIR"
 
-for d in */ ; do
-    dname=${d/%\//}
-    if [ "$dname" != "build" ]; then
-        dpkg-deb --build "$dname"
-        mv "$dname".deb build/
-    fi
+for d in */; do
+  dname=${d/%\//}
+  if [ "$dname" != "$DIR" ]; then
+    dpkg-deb --build "$dname" "$DIR"/
+  fi
 done
 
-cd build/
-dpkg-scanpackages . > Packages
+dpkg-scanpackages "$DIR" > "$DIR"/Packages
