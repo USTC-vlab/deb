@@ -1,0 +1,13 @@
+Package: firefox-vlab
+Version: 2:1vlab1
+Section: web
+Priority: optional
+Architecture: all
+Origin: Ubuntu
+Provides: gnome-www-browser, iceweasel, www-browser, x-www-browser
+Maintainer: USTC Vlab <vlab@ustc.edu.cn>
+Pre-Depends: debconf
+Depends: debconf (>= 0.5) | debconf-2.0
+Breaks: firefox, firefox-dbg, firefox-dev, firefox-geckodriver, firefox-mozsymbols
+Replaces: firefox, firefox-dbg, firefox-dev, firefox-geckodriver, firefox-mozsymbols
+Description: System files for Firefox on Vlab Software
