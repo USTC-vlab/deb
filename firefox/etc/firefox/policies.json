@@ -1,0 +1,7 @@
+{
+  "policies": {
+    "AppAutoUpdate": false,
+    "DisableAppUpdate": true,
+    "DisableTelemetry": true
+  }
+}
