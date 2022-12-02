@@ -1,0 +1,4 @@
+#!/bin/sh
+
+echo "Enabling and starting earlyoom.service..."
+systemctl enable --now earlyoom.service
