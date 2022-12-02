@@ -4,6 +4,7 @@
 DISPLAY=":0"
 LIGHTDM_PID=$PPID
 XVNC_PID=0
+UBUNTU_VERSION=$(cut -f2 <<< "$(lsb_release -r)")
 
 kill_vnc() {
   kill -s SIGTERM $XVNC_PID
@@ -16,7 +17,12 @@ fi
 
 AUTHORITY="/var/run/lightdm/root/$DISPLAY"
 
-Xvnc "$DISPLAY" -rfbport 5900 -seat seat0 -SecurityTypes None -auth "$AUTHORITY" -SendPrimary=0 &
+if [ "$UBUNTU_VERSION" == "18.04" ]; then
+  Xvnc "$DISPLAY" -rfbport 5900 -seat seat0 -SecurityTypes None -auth "$AUTHORITY" &
+else
+  Xvnc "$DISPLAY" -rfbport 5900 -seat seat0 -SecurityTypes None -auth "$AUTHORITY" -SendPrimary=0 &
+fi
+
 XVNC_PID=$!
 trap kill_vnc SIGTERM
 
