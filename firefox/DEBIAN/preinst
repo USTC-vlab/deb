@@ -74,6 +74,9 @@ if [ "$1" = "install" ] || [ "$1" = "upgrade" ] ; then
 	        # Fresh install and no other firefox profiles exist, so disable.
                 disable_profile
             fi
+
+            MATE_DESKTOP=dpkg-divert --rename --divert /usr/share/mate/applications/firefox.desktop.dpkg-divert /usr/share/mate/applications/firefox.desktop
+            dpkg-divert --rename --divert "$MATE_DESKTOP".dpkg-divert "$MATE_DESKTOP"
         elif [ "$1" = "upgrade" ]; then
             # Disable AppArmor on upgrade from earlier than when we first shipped
             # the profile if the user does not already have a profile defined.
