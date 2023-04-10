@@ -1,12 +1,4 @@
 #!/bin/sh
 
-INSTALL_MODE=0
-if [ -r /tmp/vlab-earlyoom ]; then
-  INSTALL_MODE="$(cat < /tmp/vlab-earlyoom)"
-fi
-rm -f /tmp/vlab-earlyoom
-
-if [ "$INSTALL_MODE" = "1" ]; then
-  echo "Enabling and starting earlyoom.service..."
-  systemctl enable --now earlyoom.service || true
-fi
+echo "Enabling and starting vlab-earlyoom.service..."
+systemctl enable --now vlab-earlyoom.service || true

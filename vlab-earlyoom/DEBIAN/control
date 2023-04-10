@@ -1,8 +1,11 @@
 Package: vlab-earlyoom
-Version: 1.0-2
+Version: 1.1-1
 Section: base
 Priority: optional
 Architecture: all
-Depends: earlyoom, libnotify-bin
+Depends: zenity
+Provides: earlyoom
+Conflicts: earlyoom
+Replaces: earlyoom
 Maintainer: USTC Vlab <vlab@ustc.edu.cn>
 Description: Vlab earlyoom configurations for interactive responsiveness

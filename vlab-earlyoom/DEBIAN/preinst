@@ -5,11 +5,10 @@ PACKAGE=vlab-earlyoom
 
 case "$1" in
   install)
-    dpkg-divert --package "$PACKAGE" --divert /etc/default/earlyoom.dpkg-divert --add /etc/default/earlyoom
-    echo 1 > /tmp/vlab-earlyoom
+    systemctl unmask earlyoom.service || true
     ;;
   upgrade|abort-upgrade)
-    rm -f /tmp/vlab-earlyoom
+    systemctl unmask earlyoom.service || true
     ;;
   *)
     echo "preinst called with unknown argument \`$1'" >&2
