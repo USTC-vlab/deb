@@ -4,7 +4,7 @@ Section: base
 Priority: optional
 Architecture: all
 Depends: zenity
-Provides: vlab-earlyoom
+Provides: earlyoom
 Conflicts: earlyoom
 Replaces: earlyoom
 Maintainer: USTC Vlab <vlab@ustc.edu.cn>
