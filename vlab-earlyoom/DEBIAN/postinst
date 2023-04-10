@@ -7,6 +7,6 @@ fi
 rm -f /tmp/vlab-earlyoom
 
 if [ "$INSTALL_MODE" = "1" ]; then
-  echo "Enabling and starting earlyoom.service..."
-  systemctl enable --now earlyoom.service
+  echo "Enabling and starting vlab-earlyoom.service..."
+  systemctl enable --now vlab-earlyoom.service
 fi
