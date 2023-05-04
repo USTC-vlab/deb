@@ -1,7 +1,7 @@
 Package: vlab-vnc
 Version: 1.0-2p4
 Section: base
-Priority: optional
+Priority: required
 Architecture: all
 Pre-Depends: dbus-x11
 Depends: lightdm, lightdm-greeter, tigervnc-standalone-server, iptables-persistent, lsb-release
