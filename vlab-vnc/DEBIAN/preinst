@@ -6,10 +6,8 @@ PACKAGE=vlab-vnc
 case "$1" in
   install)
     dpkg-divert --package "$PACKAGE" --divert /etc/lightdm/lightdm.conf.dpkg-divert --add /etc/lightdm/lightdm.conf
-    echo 1 > /tmp/vlab-vnc
     ;;
   upgrade|abort-upgrade)
-    rm -f /tmp/vlab-vnc
     ;;
   *)
     echo "preinst called with unknown argument \`$1'" >&2

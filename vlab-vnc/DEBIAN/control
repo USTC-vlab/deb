@@ -1,10 +1,10 @@
 Package: vlab-vnc
-Version: 1.0-2p4
+Version: 1.0-3
 Section: base
 Priority: required
 Architecture: all
 Pre-Depends: dbus-x11
-Depends: lightdm, lightdm-greeter, tigervnc-standalone-server, iptables-persistent, lsb-release
+Depends: lightdm, lightdm-greeter, tigervnc-standalone-server, lsb-release
 Recommends: lightdm-gtk-greeter-settings
 Maintainer: USTC Vlab <vlab@ustc.edu.cn>
 Description: Enable VNC in coordination with Vlab frontend
