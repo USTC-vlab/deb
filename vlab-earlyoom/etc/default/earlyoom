@@ -1,2 +1,2 @@
 # Options to pass to earlyoom
-EARLYOOM_ARGS="-r 60 -m 2 -s 5 --avoid sshd -N /etc/vlab/earlyoom-notif.sh"
+EARLYOOM_ARGS="-r 60 -m 5 -s 5 --avoid sshd -N /etc/vlab/earlyoom-notif.sh"
