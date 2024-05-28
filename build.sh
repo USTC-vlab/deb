@@ -13,5 +13,8 @@ for d in */; do
   fi
 done
 
-cd "$DIR"
-dpkg-scanpackages . > Packages
+(
+  cd "$DIR"
+  dpkg-scanpackages . > Packages
+)
+apt-ftparchive -c main.conf release build > "$DIR"/Release
