@@ -1,0 +1,19 @@
+#!/bin/sh
+set -e
+
+PACKAGE=vlab-earlyoom
+
+case "$1" in
+  install)
+    systemctl unmask earlyoom.service || true
+    ;;
+  upgrade|abort-upgrade)
+    systemctl unmask earlyoom.service || true
+    ;;
+  *)
+    echo "preinst called with unknown argument \`$1'" >&2
+    exit 0
+    ;;
+esac
+#DEBHELPER#
+exit 0

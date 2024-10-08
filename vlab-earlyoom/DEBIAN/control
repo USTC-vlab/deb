@@ -1,11 +1,11 @@
 Package: vlab-earlyoom
-Version: 1.1-4
+Version: 1.1-5
 Section: base
 Priority: optional
 Architecture: all
 Recommends: zenity
 Provides: earlyoom
-Conflicts: earlyoom
-Replaces: earlyoom
+Conflicts: earlyoom, vlab-earlyoom-static
+Replaces: earlyoom, vlab-earlyoom-static
 Maintainer: USTC Vlab <vlab@ustc.edu.cn>
 Description: Vlab earlyoom configurations for interactive responsiveness

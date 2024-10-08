@@ -1,0 +1,11 @@
+Package: vlab-earlyoom-static
+Version: 1.1-5
+Section: base
+Priority: optional
+Architecture: amd64
+Recommends: zenity
+Provides: earlyoom
+Conflicts: earlyoom, vlab-earlyoom
+Replaces: earlyoom, vlab-earlyoom
+Maintainer: USTC Vlab <vlab@ustc.edu.cn>
+Description: Vlab earlyoom configurations for interactive responsiveness, with static earlyoom binary

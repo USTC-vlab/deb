@@ -1,0 +1,4 @@
+#!/bin/sh
+
+echo "Enabling and starting vlab-earlyoom.service..."
+systemctl enable --now vlab-earlyoom.service || true
