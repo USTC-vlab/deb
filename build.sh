@@ -9,7 +9,7 @@ mkdir -p "$DIR"
 for d in */; do
   dname=${d/%\//}
   if [ "$dname" != "$DIR" ]; then
-    dpkg-deb --build -Zxz "$dname" "$DIR"/
+    dpkg-deb --root-owner-group --build -Zxz "$dname" "$DIR"/
   fi
 done
 
