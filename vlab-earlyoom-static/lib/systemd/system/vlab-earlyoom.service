@@ -10,7 +10,7 @@ ExecStart=/usr/bin/earlyoom $EARLYOOM_ARGS
 Restart=always
 # set memory limits and max tasks number
 TasksMax=10
-MemoryMax=50M
+MemoryHigh=50M
 
 [Install]
 WantedBy=multi-user.target
