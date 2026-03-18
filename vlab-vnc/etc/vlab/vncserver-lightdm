@@ -16,11 +16,12 @@ if [ $# -gt 0 ]; then
 fi
 
 AUTHORITY="/var/run/lightdm/root/$DISPLAY"
+LISTEN_ADDR="$(ip -j route get 172.31.0.2 | jq -r '.[0].prefsrc')"
 
 if [ "$UBUNTU_VERSION" == "18.04" ]; then
-  Xvnc "$DISPLAY" -rfbport 5900 -seat seat0 -SecurityTypes None -auth "$AUTHORITY" &
+  Xvnc "$DISPLAY" -interface "$LISTEN_ADDR" -rfbport 5900 -seat seat0 -SecurityTypes None -auth "$AUTHORITY" &
 else
-  Xvnc "$DISPLAY" -rfbport 5900 -seat seat0 -SecurityTypes None -auth "$AUTHORITY" -SendPrimary=0 &
+  Xvnc "$DISPLAY" -interface "$LISTEN_ADDR" -rfbport 5900 -seat seat0 -SecurityTypes None -auth "$AUTHORITY" -SendPrimary=0 &
 fi
 
 XVNC_PID=$!
