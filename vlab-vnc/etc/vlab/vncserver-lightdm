@@ -4,11 +4,18 @@
 DISPLAY=":0"
 LIGHTDM_PID=$PPID
 XVNC_PID=0
+XVNC_READY=0
 UBUNTU_VERSION=$(cut -f2 <<< "$(lsb_release -r)")
 
 kill_vnc() {
-  kill -s SIGTERM $XVNC_PID
+  if [ "$XVNC_PID" -gt 0 ]; then
+    kill -s SIGTERM $XVNC_PID
+  fi
   wait
+}
+
+vnc_ready() {
+  XVNC_READY=1
 }
 
 if [ $# -gt 0 ]; then
@@ -19,16 +26,40 @@ AUTHORITY="/var/run/lightdm/root/$DISPLAY"
 LISTEN_ADDR="$(ip -j route get 172.31.0.2 | jq -r '.[0].prefsrc')"
 
 if [ "$UBUNTU_VERSION" == "18.04" ]; then
-  Xvnc "$DISPLAY" -interface "$LISTEN_ADDR" -rfbport 5900 -seat seat0 -SecurityTypes None -auth "$AUTHORITY" &
+  (
+    trap '' SIGUSR1
+    exec Xvnc "$DISPLAY" -interface "$LISTEN_ADDR" -rfbport 5900 -seat seat0 -SecurityTypes None -auth "$AUTHORITY"
+  ) &
 else
-  Xvnc "$DISPLAY" -interface "$LISTEN_ADDR" -rfbport 5900 -seat seat0 -SecurityTypes None -auth "$AUTHORITY" -SendPrimary=0 &
+  (
+    trap '' SIGUSR1
+    exec Xvnc "$DISPLAY" -interface "$LISTEN_ADDR" -rfbport 5900 -seat seat0 -SecurityTypes None -auth "$AUTHORITY" -SendPrimary=0
+  ) &
 fi
 
 XVNC_PID=$!
 trap kill_vnc SIGTERM
+trap vnc_ready SIGUSR1
 
-sleep 2
-kill -s SIGUSR1 $LIGHTDM_PID
+# Wait for 60s for Xvnc to start
+for _ in {1..600}; do
+  if [ "$XVNC_READY" -eq 1 ]; then
+    break
+  fi
+
+  if ! kill -0 "$XVNC_PID" 2>/dev/null; then
+    break
+  fi
+
+  sleep 0.1
+done
+
+if [ "$XVNC_READY" -eq 1 ]; then
+  kill -s SIGUSR1 $LIGHTDM_PID
+else
+  kill_vnc
+  exit 1
+fi
 
 wait
 exit 0
