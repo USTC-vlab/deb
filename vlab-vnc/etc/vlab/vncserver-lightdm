@@ -1,65 +1,107 @@
-#!/bin/bash
-# Need Bash for $PPID
+#!/usr/bin/python3
+# This script cannot be written in bash, as POSIX shell
+# cannot override signal handler when it inherits SIG_IGN.
 
-DISPLAY=":0"
-LIGHTDM_PID=$PPID
-XVNC_PID=0
-XVNC_READY=0
-UBUNTU_VERSION=$(cut -f2 <<< "$(lsb_release -r)")
+import json
+import os
+import signal
+import subprocess
+import sys
+import time
 
-kill_vnc() {
-  if [ "$XVNC_PID" -gt 0 ]; then
-    kill -s SIGTERM $XVNC_PID
-  fi
-  wait
-}
 
-vnc_ready() {
-  XVNC_READY=1
-}
+XVNC_PROC = None
+XVNC_READY = False
 
-if [ $# -gt 0 ]; then
-  DISPLAY="$1"
-fi
 
-AUTHORITY="/var/run/lightdm/root/$DISPLAY"
-LISTEN_ADDR="$(ip -j route get 172.31.0.2 | jq -r '.[0].prefsrc')"
+def on_sigusr1(_signum, _frame):
+    global XVNC_READY
+    XVNC_READY = True
 
-if [ "$UBUNTU_VERSION" == "18.04" ]; then
-  (
-    trap '' SIGUSR1
-    exec Xvnc "$DISPLAY" -interface "$LISTEN_ADDR" -rfbport 5900 -seat seat0 -SecurityTypes None -auth "$AUTHORITY"
-  ) &
-else
-  (
-    trap '' SIGUSR1
-    exec Xvnc "$DISPLAY" -interface "$LISTEN_ADDR" -rfbport 5900 -seat seat0 -SecurityTypes None -auth "$AUTHORITY" -SendPrimary=0
-  ) &
-fi
 
-XVNC_PID=$!
-trap kill_vnc SIGTERM
-trap vnc_ready SIGUSR1
+def kill_vnc(_signum=None, _frame=None):
+    global XVNC_PROC
 
-# Wait for 60s for Xvnc to start
-for _ in {1..600}; do
-  if [ "$XVNC_READY" -eq 1 ]; then
-    break
-  fi
+    if XVNC_PROC is not None and XVNC_PROC.poll() is None:
+        XVNC_PROC.terminate()
 
-  if ! kill -0 "$XVNC_PID" 2>/dev/null; then
-    break
-  fi
+    if XVNC_PROC is not None:
+        try:
+            XVNC_PROC.wait()
+        except Exception:
+            pass
 
-  sleep 0.1
-done
+    if _signum is not None:
+        sys.exit(0)
 
-if [ "$XVNC_READY" -eq 1 ]; then
-  kill -s SIGUSR1 $LIGHTDM_PID
-else
-  kill_vnc
-  exit 1
-fi
 
-wait
-exit 0
+def get_ubuntu_version():
+    output = subprocess.check_output(["lsb_release", "-r"], text=True)
+    return output.split(":", 1)[1].strip()
+
+
+def get_listen_addr():
+    output = subprocess.check_output(
+        ["ip", "-j", "route", "get", "172.31.0.2"],
+        text=True,
+    )
+    routes = json.loads(output)
+    return routes[0]["prefsrc"]
+
+
+def main():
+    global XVNC_PROC
+
+    display = ":0"
+    if len(sys.argv) > 1:
+        display = sys.argv[1]
+
+    lightdm_pid = os.getppid()
+    authority = f"/var/run/lightdm/root/{display}"
+    listen_addr = get_listen_addr()
+    ubuntu_version = get_ubuntu_version()
+
+    signal.signal(signal.SIGUSR1, on_sigusr1)
+    signal.signal(signal.SIGTERM, kill_vnc)
+
+    xvnccmd = [
+        "Xvnc",
+        display,
+        "-interface",
+        listen_addr,
+        "-rfbport",
+        "5900",
+        "-seat",
+        "seat0",
+        "-SecurityTypes",
+        "None",
+        "-auth",
+        authority,
+    ]
+    if ubuntu_version != "18.04":
+        xvnccmd.append("-SendPrimary=0")
+
+    XVNC_PROC = subprocess.Popen(
+        xvnccmd,
+        preexec_fn=lambda: signal.signal(signal.SIGUSR1, signal.SIG_IGN),
+    )
+
+    for _ in range(600):
+        if XVNC_READY:
+            break
+        if XVNC_PROC.poll() is not None:
+            break
+        time.sleep(0.1)
+
+    if XVNC_READY:
+        os.kill(lightdm_pid, signal.SIGUSR1)
+    else:
+        print("VNC timeout. Killing...", file=sys.stderr)
+        kill_vnc()
+        return 1
+
+    return XVNC_PROC.wait()
+
+
+if __name__ == "__main__":
+    sys.exit(main())
