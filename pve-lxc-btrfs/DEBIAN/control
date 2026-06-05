@@ -1,8 +1,8 @@
 Package: pve-lxc-btrfs
-Version: 1.0
+Version: 1.0-1
 Section: base
 Priority: optional
 Architecture: all
-Depends: e2fsprogs
+Depends: e2fsprogs, btrfs-progs
 Maintainer: USTC Vlab <vlab@ustc.edu.cn>
 Description: Replace mkfs.ext4 with mkfs.btrfs wrapper for Proxmox VE LXC containers
