@@ -1,0 +1,18 @@
+#!/bin/sh
+set -e
+
+PACKAGE=pve-lxc-btrfs
+
+case "$1" in
+  install)
+    dpkg-divert --package "$PACKAGE" --divert /usr/sbin/mkfs.ext4.dpkg-divert --rename --add /usr/sbin/mkfs.ext4
+    ;;
+  upgrade|abort-upgrade)
+    ;;
+  *)
+    echo "preinst called with unknown argument \`$1'" >&2
+    exit 0
+    ;;
+esac
+#DEBHELPER#
+exit 0

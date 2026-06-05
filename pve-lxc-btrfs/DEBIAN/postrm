@@ -1,0 +1,18 @@
+#!/bin/sh
+set -e
+
+PACKAGE=pve-lxc-btrfs
+
+case "$1" in
+  remove|purge)
+    dpkg-divert --package "$PACKAGE" --rename --remove /usr/sbin/mkfs.ext4
+    ;;
+  upgrade|disappear|abort-install|abort-upgrade)
+    ;;
+  *)
+    echo "postrm called with unknown argument \`$1'" >&2
+    exit 0
+    ;;
+esac
+#DEBHELPER#
+exit 0

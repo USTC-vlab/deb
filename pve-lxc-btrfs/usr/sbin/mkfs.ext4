@@ -1,0 +1,32 @@
+#!/bin/sh
+
+echo "Vlab mkfs.ext4 wrapper for Btrfs" >&2
+
+set -eu
+env > /tmp/mkfs.ext4.env.txt
+
+# Parse arguments
+root_owner="0:0"
+dev=""
+while [ $# -ne 0 ]; do
+  case "$1" in
+    root_owner=*) root_owner="${1#*=}" ;;
+    *) dev="$1";;
+  esac
+  shift
+done
+
+if [ -z "$dev" ]; then
+  echo "No dev" >&2
+  exit 1
+fi
+
+/usr/sbin/mkfs.btrfs "$dev"
+tmpdir="$(mktemp -d)"
+mount "$dev" "$tmpdir"
+btrfs subvolume create "$tmpdir/@"
+btrfs subvolume set-default "$tmpdir/@"
+btrfs property set "$tmpdir/@" compression zstd
+chown "$root_owner" "$tmpdir/@"
+umount "$tmpdir"
+rmdir "$tmpdir"
