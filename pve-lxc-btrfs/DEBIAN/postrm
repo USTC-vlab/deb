@@ -6,6 +6,7 @@ PACKAGE=pve-lxc-btrfs
 case "$1" in
   remove|purge)
     dpkg-divert --package "$PACKAGE" --rename --remove /usr/sbin/mkfs.ext4
+    dpkg-divert --package "$PACKAGE" --rename --remove /usr/sbin/resize2fs
     ;;
   upgrade|disappear|abort-install|abort-upgrade)
     ;;

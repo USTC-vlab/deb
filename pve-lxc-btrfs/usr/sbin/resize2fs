@@ -1,0 +1,25 @@
+#!/bin/sh
+
+set -eu
+
+orig_resize2fs=/usr/sbin/resize2fs.dpkg-divert
+
+if [ "$#" -ne 1 ]; then
+  exec "$orig_resize2fs" "$@"
+fi
+
+dev="$1"
+fstype="$(blkid -p -o value -s TYPE "$dev" 2>/dev/null || true)"
+
+if [ "$fstype" = "ext4" ] || [ -z "$fstype" ]; then
+  exec "$orig_resize2fs" "$@"
+fi
+
+mountpoint="$(findmnt -n -o TARGET --source "$dev" 2>/dev/null || true)"
+
+if [ -z "$mountpoint" ]; then
+  echo "Cannot find mountpoint for $dev" >&2
+  exit 1
+fi
+
+exec btrfs filesystem resize max "$mountpoint"

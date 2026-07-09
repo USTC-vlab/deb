@@ -6,8 +6,14 @@ PACKAGE=pve-lxc-btrfs
 case "$1" in
   install)
     dpkg-divert --package "$PACKAGE" --divert /usr/sbin/mkfs.ext4.dpkg-divert --rename --add /usr/sbin/mkfs.ext4
+    dpkg-divert --package "$PACKAGE" --divert /usr/sbin/resize2fs.dpkg-divert --rename --add /usr/sbin/resize2fs
     ;;
-  upgrade|abort-upgrade)
+  upgrade)
+    if ! dpkg-divert --list /usr/sbin/resize2fs >/dev/null 2>&1; then
+      dpkg-divert --package "$PACKAGE" --divert /usr/sbin/resize2fs.dpkg-divert --rename --add /usr/sbin/resize2fs
+    fi
+    ;;
+  abort-upgrade)
     ;;
   *)
     echo "preinst called with unknown argument \`$1'" >&2
