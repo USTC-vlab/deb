@@ -9,7 +9,7 @@ case "$1" in
     dpkg-divert --package "$PACKAGE" --divert /usr/sbin/resize2fs.dpkg-divert --rename --add /usr/sbin/resize2fs
     ;;
   upgrade)
-    if ! dpkg-divert --list /usr/sbin/resize2fs >/dev/null 2>&1; then
+    if [ "$(dpkg-divert --listpackage /usr/sbin/resize2fs 2>/dev/null)" != "$PACKAGE" ]; then
       dpkg-divert --package "$PACKAGE" --divert /usr/sbin/resize2fs.dpkg-divert --rename --add /usr/sbin/resize2fs
     fi
     ;;
